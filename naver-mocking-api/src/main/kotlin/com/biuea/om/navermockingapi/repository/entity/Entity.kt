@@ -1,9 +1,10 @@
 package com.biuea.om.navermockingapi.repository.entity
 
 import com.biuea.om.navermockingapi.api.ProductUpdateRequest
-import org.springframework.data.annotation.CreatedDate
+import org.hibernate.annotations.UpdateTimestamp
+
 import jakarta.persistence.*
-import org.springframework.data.annotation.LastModifiedDate
+import org.hibernate.annotations.CreationTimestamp
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import java.time.LocalDateTime
 import java.math.BigDecimal
@@ -43,11 +44,11 @@ class Seller(
     @Column(name = "api_secret", nullable = false)
     val apiSecret: String,
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at")
     val updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
@@ -82,8 +83,8 @@ class Category(
     @Column(name = "is_active")
     val isActive: Boolean = true,
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
 
@@ -136,11 +137,11 @@ class Product(
     @OneToMany(mappedBy = "product", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val options: MutableList<ProductOption> = mutableListOf(),
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at")
     val updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
@@ -181,8 +182,8 @@ class ProductImage(
     @Column(name = "image_order")
     val imageOrder: Int = 0,
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
 
@@ -215,8 +216,8 @@ class ProductOption(
     @Column(name = "use_yn")
     val useYn: Boolean = true,
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now()
 )
 
@@ -275,11 +276,11 @@ class Order(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val orderItems: MutableList<OrderItem> = mutableListOf(),
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now(),
 
-    @LastModifiedDate
+    @UpdateTimestamp
     @Column(name = "updated_at")
     val updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
@@ -321,8 +322,8 @@ class OrderItem(
     @Enumerated(EnumType.STRING)
     var status: OrderStatus = OrderStatus.PAYMENT_WAITING,
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
     fun updateStatus(orderStatus: OrderStatus) {
