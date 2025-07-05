@@ -1,5 +1,6 @@
 package com.biuea.om.store.domain.entity
 
+import com.biuea.om.store.domain.value.StoreRegistrationInfo
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
@@ -22,11 +23,28 @@ class StoreIntegration(
         columnDefinition = "bigint(20)",
         foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
     )
-    val store: Store,
+    var store: Store,
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
+
+    fun mapBy(store: Store) {
+        this.store = store
+    }
+
+    companion object {
+        fun create(
+            registrationInfo: StoreRegistrationInfo,
+            store: Store
+        ): StoreIntegration {
+            return StoreIntegration(
+                integrationPlatform = registrationInfo.platform,
+                platformId = registrationInfo.platformId,
+                store = store
+            )
+        }
+    }
 }
 
 enum class IntegrationPlatform {

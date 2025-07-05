@@ -6,21 +6,21 @@ import org.hibernate.annotations.SQLRestriction
 import java.time.ZonedDateTime
 
 @SQLRestriction("deleted_at is null")
-@SQLDelete(sql = "update catalog_register_information set deleted_at = now() where id = ?")
-@Table(name = "catalog_register_information")
+@SQLDelete(sql = "update product_register_information set deleted_at = now() where id = ?")
+@Table(name = "product_register_information")
 @Entity
-class CatalogRegisterInformation(
+class ProductRegisterInformation(
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "varchar(30)")
     val status: RegisterPlatform,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "catalog_id",
+        name = "product_id",
         columnDefinition = "bigint(20)",
         foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
     )
-    val catalog: Catalog,
+    val product: Product,
 
     @Column(name = "deleted_at")
     val deletedAt: ZonedDateTime?,
