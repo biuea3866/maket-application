@@ -1,0 +1,118 @@
+services:
+  kafka-1:
+    container_name: kafka-1
+    image: confluentinc/cp-kafka:latest
+    platform: linux/amd64
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./docker-volume/kafka/secrets:/etc/kafka/secrets
+      - ./docker-volume/kafka/config:/mnt/shared/config
+    environment:
+      CLUSTER_ID: "event-broker"
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29092,2@kafka-2:29093,3@kafka-3:29094"
+      KAFKA_LISTENERS: "PLAINTEXT://:19092,CONTROLLER://:29092,EXTERNAL://:9092"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-00:19092,EXTERNAL://localhost:9092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    networks:
+      - local-infra
+
+  kafka-2:
+    container_name: kafka-2
+    image: confluentinc/cp-kafka:latest
+    platform: linux/amd64
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./docker-volume/kafka/secrets:/etc/kafka/secrets
+      - ./docker-volume/kafka/config:/mnt/shared/config
+    environment:
+      CLUSTER_ID: "event-broker"
+      KAFKA_NODE_ID: 2
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29092,2@kafka-2:29093,3@kafka-3:29094"
+      KAFKA_LISTENERS: "PLAINTEXT://:19093,CONTROLLER://:29093,EXTERNAL://:9093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-01:19093,EXTERNAL://localhost:9093"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    networks:
+      - local-infra
+
+  kafka-3:
+    container_name: kafka-3
+    image: confluentinc/cp-kafka:latest
+    platform: linux/amd64
+    ports:
+      - "9094:9094"
+    volumes:
+      - ./docker-volume/kafka/secrets:/etc/kafka/secrets
+      - ./docker-volume/kafka/config:/mnt/shared/config
+    environment:
+      CLUSTER_ID: "event-broker"
+      KAFKA_NODE_ID: 3
+      KAFKA_CONTROLLER_LISTENER_NAMES: 'CONTROLLER'
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29092,2@kafka-2:29093,3@kafka-3:29094"
+      KAFKA_LISTENERS: "PLAINTEXT://:19094,CONTROLLER://:29094,EXTERNAL://:9094"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-02:19094,EXTERNAL://localhost:9094"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
+      KAFKA_PROCESS_ROLES: 'broker,controller'
+    networks:
+      - local-infra
+
+  # Kafka UI
+  # Just for monitoring...
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka-1
+      - kafka-2
+      - kafka-3
+    ports:
+      - "9090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka-1:19092,kafka-2:19093,kafka-3:19094
+    networks:
+      - local-infra
+
+  # Redis Node 1
+  redis-node-1:
+    image: redis:6.2-alpine
+    container_name: redis-node-1
+    command: ["redis-server", "--port", "6379", "--cluster-enabled", "yes", "--cluster-config-file", "nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data1:/data
+
+  # Redis Node 2
+  redis-node-2:
+    image: redis:6.2-alpine
+    container_name: redis-node-2
+    command: ["redis-server", "--port", "6380", "--cluster-enabled", "yes", "--cluster-config-file", "nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data2:/data
+
+  # Redis Node 3
+  redis-node-3:
+    image: redis:6.2-alpine
+    container_name: redis-node-3
+    command: ["redis-server", "--port", "6381", "--cluster-enabled", "yes", "--cluster-config-file", "nodes.conf", "--cluster-node-timeout", "5000", "--appendonly", "yes"]
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis-data3:/data
+
+volumes:
+  redis-data1:
+  redis-data2:
+  redis-data3:
+
+networks:
+  local-infra:
+    driver: bridge
