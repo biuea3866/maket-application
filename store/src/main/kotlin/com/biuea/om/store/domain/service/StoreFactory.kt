@@ -1,32 +1,35 @@
 package com.biuea.om.store.domain.service
 
 import com.biuea.om.store.domain.entity.IntegrationPlatform
+import com.biuea.om.store.domain.value.StoreRegistrationInfo
+import com.biuea.om.store.domain.value.StoreRegistrationRequestInfo
+import org.springframework.stereotype.Service
 
-class StoreFactory(
+@Service
+class StoreIntegrationFactory(
     private val registerStore: List<RegisterStore>,
     private val cancelStores: List<CancelStore>,
-    private val registerCatalog: List<RegisterCatalog>
+    private val registerProduct: List<RegisterProduct>
 ) {
     fun registerStore(
         platform: IntegrationPlatform,
-        request: RegisterStoreRequest
-    ) {
-        this.registerStore.find { it.platform == platform }
+        request: StoreRegistrationRequestInfo
+    ): StoreRegistrationInfo {
+        return this.registerStore.find { it.platform == platform }
             ?.register(request)
+            ?: throw IllegalStateException("Can't find registerStore for platform: $platform")
     }
 
-    fun registerStoresBy(platforms: Map<IntegrationPlatform, RegisterStoreRequest>) {
+    fun registerStoresBy(platforms: Map<IntegrationPlatform, StoreRegistrationRequestInfo>) {
         this.registerStore.forEach {
             if (it.platform in platforms.keys) it.register(platforms[it.platform]!!)
         }
     }
 
-    fun registerAll(platforms: Map<IntegrationPlatform, RegisterStoreRequest>) {
+    fun registerAll(platforms: Map<IntegrationPlatform, StoreRegistrationRequestInfo>) {
         this.registerStore.forEach { it.register(platforms[it.platform]!!) }
     }
 }
-
-interface RegisterStoreRequest
 
 interface CancelStoreRequest
 
@@ -37,7 +40,7 @@ interface CancelCatalogRequest
 interface RegisterStore {
     val platform: IntegrationPlatform
 
-    fun register(request: RegisterStoreRequest)
+    fun register(registrationInformation: StoreRegistrationRequestInfo): StoreRegistrationInfo
 }
 
 interface CancelStore {
@@ -46,10 +49,14 @@ interface CancelStore {
     fun cancel(request: CancelStoreRequest)
 }
 
-interface RegisterCatalog {
+interface RegisterProduct {
+    val platform: IntegrationPlatform
+
     fun register()
 }
 
-interface CancelCatalog {
+interface CancelProduct {
+    val platform: IntegrationPlatform
+
     fun cancel()
 }

@@ -6,10 +6,10 @@ import org.hibernate.annotations.SQLRestriction
 import java.time.ZonedDateTime
 
 @SQLRestriction("deleted_at is null")
-@SQLDelete(sql = "update catalog set deleted_at = now() where id = ?")
-@Table(name = "catalog")
+@SQLDelete(sql = "update product set deleted_at = now() where id = ?")
+@Table(name = "product")
 @Entity
-class Catalog(
+class Product(
     @Column(name = "name", columnDefinition = "varchar(100)")
     val name: String,
     @Column(name = "description", columnDefinition = "text")
@@ -20,7 +20,7 @@ class Catalog(
     val price: Double,
     @Column(name = "status", columnDefinition = "varchar(30)")
     @Enumerated(EnumType.STRING)
-    val status: CatalogStatus,
+    val status: ProductStatus,
     @Column(name = "registered_at", columnDefinition = "timestamp")
     val registeredAt: ZonedDateTime,
     @Column(name = "confirmed_at", columnDefinition = "timestamp")
@@ -38,17 +38,17 @@ class Catalog(
     @OneToMany(
         fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL],
-        mappedBy = "catalog",
+        mappedBy = "product",
         orphanRemoval = true
     )
-    val registerInformations: List<CatalogRegisterInformation>,
+    val registerInformations: List<ProductRegisterInformation>,
     @OneToMany(
         fetch = FetchType.LAZY,
         cascade = [CascadeType.ALL],
-        mappedBy = "catalog",
+        mappedBy = "product",
         orphanRemoval = true
     )
-    val catalogNotConfirmedReasons: List<CatalogNotConfirmedReason>,
+    val productNotConfirmedReasons: List<ProductNotConfirmedReason>,
     @Column(name = "store_id", columnDefinition = "bigint(20)")
     val storeId: Long,
 ) {
@@ -57,7 +57,7 @@ class Catalog(
     val id: Long = 0L
 }
 
-enum class CatalogStatus {
+enum class ProductStatus {
     REGISTER,
     CONFIRM,
     REVIEW,

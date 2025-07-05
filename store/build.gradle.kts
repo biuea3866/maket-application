@@ -11,6 +11,14 @@ java {
     }
 }
 
+val springCloudVersion: String by project
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion")
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -24,6 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")

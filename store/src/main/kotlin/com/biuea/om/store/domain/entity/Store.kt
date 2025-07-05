@@ -1,5 +1,6 @@
 package com.biuea.om.store.domain.entity
 
+import com.biuea.om.store.domain.value.StoreRegistrationInfo
 import jakarta.persistence.*
 import org.hibernate.annotations.SQLDelete
 import org.hibernate.annotations.SQLRestriction
@@ -34,7 +35,7 @@ class Store(
     @Column(name = "registered_by", columnDefinition = "bigint(20)")
     val registeredBy: Long,
     @Column(name = "deleted_by", columnDefinition = "bigint(20)")
-    val deletedBy: Long,
+    val deletedBy: Long?,
 
     @OneToMany(
         fetch = FetchType.LAZY,
@@ -63,10 +64,43 @@ class Store(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0L
+
+    fun addStoreIntegration(registrationInfo: StoreRegistrationInfo) {
+        val integration = StoreIntegration.create(
+            registrationInfo = registrationInfo,
+            store = this
+        )
+        this.integrations.add(integration)
+    }
+
+    companion object {
+        fun register(
+            name: String,
+            description: String?,
+            userId: Long,
+            registrationInfo: StoreRegistrationInfo
+        ): Store {
+            return Store(
+                name = name,
+                description = description,
+                userId = userId,
+                status = registrationInfo.integrationStatus,
+                registeredAt = ZonedDateTime.now(),
+                confirmedAt = null,
+                updatedAt = ZonedDateTime.now(),
+                deletedAt = null,
+                registeredBy = userId,
+                deletedBy = null,
+                histories = mutableListOf(),
+                integrations = mutableListOf(),
+                notConfirmedReasons = mutableListOf(),
+            )
+        }
+    }
 }
 
 enum class StoreStatus {
-    REGISTER,
-    CONFIRM,
-    NOT_CONFIRM
+    REGISTER, // naver: PENDING, SUSPENDED
+    CONFIRM,  // naver: APPROVED
+    NOT_CONFIRM // naver: REJECTED
 }

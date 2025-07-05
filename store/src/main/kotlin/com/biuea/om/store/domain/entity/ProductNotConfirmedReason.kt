@@ -16,17 +16,17 @@ import org.hibernate.annotations.SQLRestriction
 import java.time.ZonedDateTime
 
 @SQLRestriction("deleted_at is null")
-@SQLDelete(sql = "update catalog_not_confirmed_reason set deleted_at = now() where id = ?")
-@Table(name = "catalog_not_confirmed_reason")
+@SQLDelete(sql = "update product_not_confirmed_reason set deleted_at = now() where id = ?")
+@Table(name = "product_not_confirmed_reason")
 @Entity
-class CatalogNotConfirmedReason(
+class ProductNotConfirmedReason(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "catalog_id",
+        name = "product_id",
         columnDefinition = "bigint(20)",
         foreignKey = ForeignKey(ConstraintMode.NO_CONSTRAINT)
     )
-    val catalog: Catalog,
+    val product: Product,
 
     @Column(name = "reason", columnDefinition = "text")
     val reason: String?,
