@@ -1,0 +1,7 @@
+POST http://localhost:20000/features/register
+Content-Type: application/json
+
+{
+  "name": "TEST_FEATURE",
+  "toggle": true
+}
