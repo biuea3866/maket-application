@@ -39,5 +39,5 @@ out/
 ### Kotlin ###
 .kotlin
 
-data
-docker-volume
+/data
+/docker-volume
