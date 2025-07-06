@@ -13,7 +13,7 @@ import java.time.LocalDateTime
 import kotlin.String
 
 @FeignClient(
-    name = "naverClient",
+    name = "naver-client",
     url = "http://localhost:10000/naver-api/",
     configuration = [FeignConfig::class]
 )
