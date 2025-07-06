@@ -1,13 +1,12 @@
 package com.biuea.om.kakaomockingapi.api
 
-import com.biuea.om.kakaomockingapi.service.ProductService
-import com.biuea.om.kakaomockingapi.service.SellerService
-import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.Parameter
-import io.swagger.v3.oas.annotations.tags.Tag
+import com.biuea.om.kakaomockingapi.service.*
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.tags.Tag
 
 @RestController
 @RequestMapping("/v1/seller")
