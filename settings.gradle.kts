@@ -30,6 +30,7 @@ include(
     ":store",
     ":catalog",
     ":backoffice",
+    ":api-gateway",
     ":naver-mocking-api",
     ":coupang-mocking-api",
     ":carrot-mocking-api",
@@ -42,6 +43,7 @@ project(":shipping").projectDir = file("shipping")
 project(":store").projectDir = file("store")
 project(":catalog").projectDir = file("catalog")
 project(":backoffice").projectDir = file("backoffice")
+project(":api-gateway").projectDir = file("api-gateway")
 project(":naver-mocking-api").projectDir = file("naver-mocking-api")
 project(":coupang-mocking-api").projectDir = file("coupang-mocking-api")
 project(":carrot-mocking-api").projectDir = file("carrot-mocking-api")
