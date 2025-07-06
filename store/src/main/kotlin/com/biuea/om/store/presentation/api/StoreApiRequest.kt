@@ -1,4 +1,4 @@
-package com.biuea.om.store.presentation
+package com.biuea.om.store.presentation.api
 
 import com.biuea.om.store.domain.entity.IntegrationPlatform
 

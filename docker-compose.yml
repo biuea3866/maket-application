@@ -8,6 +8,7 @@ services:
     volumes:
       - ./docker-volume/kafka/secrets:/etc/kafka/secrets
       - ./docker-volume/kafka/config:/mnt/shared/config
+      - kafka-data-1:/var/lib/kafka/data
     environment:
       CLUSTER_ID: "event-broker"
       KAFKA_NODE_ID: 1
@@ -17,6 +18,10 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-1:19092,EXTERNAL://localhost:9092"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     networks:
       - local-infra
 
@@ -29,6 +34,7 @@ services:
     volumes:
       - ./docker-volume/kafka/secrets:/etc/kafka/secrets
       - ./docker-volume/kafka/config:/mnt/shared/config
+      - kafka-data-2:/var/lib/kafka/data
     environment:
       CLUSTER_ID: "event-broker"
       KAFKA_NODE_ID: 2
@@ -38,6 +44,10 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-2:19093,EXTERNAL://localhost:9093"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     networks:
       - local-infra
 
@@ -50,6 +60,7 @@ services:
     volumes:
       - ./docker-volume/kafka/secrets:/etc/kafka/secrets
       - ./docker-volume/kafka/config:/mnt/shared/config
+      - kafka-data-3:/var/lib/kafka/data
     environment:
       CLUSTER_ID: "event-broker"
       KAFKA_NODE_ID: 3
@@ -59,6 +70,10 @@ services:
       KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:19094,EXTERNAL://localhost:9094"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT'
       KAFKA_PROCESS_ROLES: 'broker,controller'
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     networks:
       - local-infra
 
@@ -112,6 +127,9 @@ volumes:
   redis-data1:
   redis-data2:
   redis-data3:
+  kafka-data-1:
+  kafka-data-2:
+  kafka-data-3:
 
 networks:
   local-infra:

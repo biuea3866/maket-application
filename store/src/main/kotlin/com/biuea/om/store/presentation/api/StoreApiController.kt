@@ -1,7 +1,10 @@
-package com.biuea.om.store.presentation
+package com.biuea.om.store.presentation.api
 
 import com.biuea.om.store.application.StoreFacade
 import com.biuea.om.store.common.ApiResponse
+import com.biuea.om.store.infrastructure.cache.FeatureToggleManager
+import org.springframework.cache.CacheManager
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
@@ -11,7 +14,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping(path = ["/stores"])
 class StoreApiController(
-    private val storeFacade: StoreFacade
+    private val storeFacade: StoreFacade,
+    private val featureToggleManager: FeatureToggleManager,
+    private val cacheManager: CacheManager
 ) {
     @PostMapping(value = ["/register"])
     fun registerStore(

@@ -1,9 +1,9 @@
 spring:
   application:
-    name: StoreApplication
+    name: BackOfficeApplication
 
   datasource:
-    url: jdbc:mysql://localhost:3306/om_store?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/om_backoffice?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -23,18 +23,14 @@ spring:
     serialization:
       write-dates-as-timestamps: false
     time-zone: Asia/Seoul
-
   kafka:
     bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
 
 server:
-  port: 9000
+  port: 20000
 
-
-# ?? ??
 logging:
   level:
-    com.market.naver: DEBUG
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
