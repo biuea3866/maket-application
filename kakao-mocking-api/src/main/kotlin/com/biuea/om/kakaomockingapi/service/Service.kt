@@ -728,7 +728,8 @@ class CategoryService(
 @Service
 @Transactional
 class KakaoNotificationService(
-    private val notificationRepository: KakaoNotificationRepository
+    private val notificationRepository: KakaoNotificationRepository,
+    private val orderRepository: OrderRepository
 ) {
     fun sendOrderNotification(order: Order) {
         val notification = KakaoNotification(

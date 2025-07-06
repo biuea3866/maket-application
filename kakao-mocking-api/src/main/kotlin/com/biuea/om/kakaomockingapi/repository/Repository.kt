@@ -9,30 +9,29 @@ import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 
 @Repository
-interface ReviewRepository : JpaRepository<Review, Long> {
-    fun findByReviewId(reviewId: String): Review?
-    fun findByProduct_ProductId(productId: String, pageable: Pageable): Page<Review>
-    fun findByProduct_ProductIdAndRatingGreaterThanEqual(productId: String, rating: Int, pageable: Pageable): Page<Review>
-    fun findByBuyerKakaoId(buyerKakaoId: String, pageable: Pageable): Page<Review>
-    fun findByIsPhotoReviewTrue(pageable: Pageable): Page<Review>
-
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.product.productId = :productId")
-    fun getAverageRatingByProductId(productId: String): Double?
-
-    fun countByProduct_ProductId(productId: String): Long
-    fun countByProduct_ProductIdAndRating(productId: String, rating: Int): Long
-    fun existsByOrder_OrderIdAndBuyerKakaoId(orderId: String, buyerKakaoId: String): Boolean
+interface SellerRepository : JpaRepository<Seller, Long> {
+    fun findBySellerId(sellerId: String): Seller?
+    fun findByApiKey(apiKey: String): Seller?
+    fun findByKakaoAccountId(kakaoAccountId: String): Seller?
+    fun findByBusinessNumber(businessNumber: String): Seller?
+    fun existsByBusinessNumber(businessNumber: String): Boolean
+    fun existsBySellerId(sellerId: String): Boolean
+    fun existsByKakaoAccountId(kakaoAccountId: String): Boolean
 }
 
 @Repository
-interface ReviewImageRepository : JpaRepository<ReviewImage, Long> {
-    fun findByReview_ReviewIdOrderByImageOrder(reviewId: String): List<ReviewImage>
-    fun deleteByReview_ReviewId(reviewId: String)
+interface CategoryRepository : JpaRepository<Category, Long> {
+    fun findByCategoryId(categoryId: String): Category?
+    fun findByParentIdIsNull(): List<Category>
+    fun findByParentId(parentId: String): List<Category>
+    fun findByIsActiveTrue(): List<Category>
+    fun findByParentIdIsNullOrderByDisplayOrder(): List<Category>
 }
 
 @Repository
-interface KakaoNotificationRepository : JpaRepository<KakaoNotification, Long> {
-    fun findByNotificationId(notificationId: String): Page<Product>
+interface ProductRepository : JpaRepository<Product, Long> {
+    fun findByProductId(productId: String): Product?
+    fun findBySeller_SellerId(sellerId: String, pageable: Pageable): Page<Product>
     fun findByStatus(status: ProductStatus, pageable: Pageable): Page<Product>
     fun findBySeller_SellerIdAndStatus(sellerId: String, status: ProductStatus, pageable: Pageable): Page<Product>
     fun findByIsKakaoPayTrue(pageable: Pageable): Page<Product>
@@ -111,26 +110,32 @@ interface WishlistRepository : JpaRepository<Wishlist, Long> {
 }
 
 @Repository
-interface SellerRepository : JpaRepository<Seller, Long> {
-    fun findBySellerId(sellerId: String): Seller?
-    fun findByApiKey(apiKey: String): Seller?
-    fun findByKakaoAccountId(kakaoAccountId: String): Seller?
-    fun findByBusinessNumber(businessNumber: String): Seller?
-    fun existsByBusinessNumber(businessNumber: String): Boolean
-    fun existsBySellerId(sellerId: String): Boolean
-    fun existsByKakaoAccountId(kakaoAccountId: String): Boolean
+interface ReviewRepository : JpaRepository<Review, Long> {
+    fun findByReviewId(reviewId: String): Review?
+    fun findByProduct_ProductId(productId: String, pageable: Pageable): Page<Review>
+    fun findByProduct_ProductIdAndRatingGreaterThanEqual(productId: String, rating: Int, pageable: Pageable): Page<Review>
+    fun findByBuyerKakaoId(buyerKakaoId: String, pageable: Pageable): Page<Review>
+    fun findByIsPhotoReviewTrue(pageable: Pageable): Page<Review>
+
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.product.productId = :productId")
+    fun getAverageRatingByProductId(productId: String): Double?
+
+    fun countByProduct_ProductId(productId: String): Long
+    fun countByProduct_ProductIdAndRating(productId: String, rating: Int): Long
+    fun existsByOrder_OrderIdAndBuyerKakaoId(orderId: String, buyerKakaoId: String): Boolean
 }
 
 @Repository
-interface CategoryRepository : JpaRepository<Category, Long> {
-    fun findByCategoryId(categoryId: String): Category?
-    fun findByParentIdIsNull(): List<Category>
-    fun findByParentId(parentId: String): List<Category>
-    fun findByIsActiveTrue(): List<Category>
-    fun findByParentIdIsNullOrderByDisplayOrder(): List<Category>
+interface ReviewImageRepository : JpaRepository<ReviewImage, Long> {
+    fun findByReview_ReviewIdOrderByImageOrder(reviewId: String): List<ReviewImage>
+    fun deleteByReview_ReviewId(reviewId: String)
 }
 
 @Repository
-interface ProductRepository : JpaRepository<Product, Long> {
-    fun findByProductId(productId: String): Product?
-    fun findBySeller_
+interface KakaoNotificationRepository : JpaRepository<KakaoNotification, Long> {
+    fun findByNotificationId(notificationId: String): KakaoNotification?
+    fun findByOrder_OrderId(orderId: String): List<KakaoNotification>
+    fun findBySendStatus(status: NotificationStatus, pageable: Pageable): Page<KakaoNotification>
+    fun findByReceiverPhone(receiverPhone: String, pageable: Pageable): Page<KakaoNotification>
+    fun countBySendStatus(status: NotificationStatus): Long
+}
