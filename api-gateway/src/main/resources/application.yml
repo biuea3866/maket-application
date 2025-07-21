@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: ApiGatewayApplication
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: Asia/Seoul
+
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+
+server:
+  port: 13000
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html

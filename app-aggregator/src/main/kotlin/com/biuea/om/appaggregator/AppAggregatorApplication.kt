@@ -1,11 +1,10 @@
-package com.biuea.om.apigateway
+package com.biuea.om.appaggregator
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
 import org.springframework.boot.runApplication
-import org.springframework.cloud.openfeign.EnableFeignClients
 
 @SpringBootApplication(
     exclude = [
@@ -14,9 +13,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients
         JpaRepositoriesAutoConfiguration::class
     ]
 )
-@EnableFeignClients
-class ApiGatewayApplication
+class AppAggregatorApplication
 
 fun main(args: Array<String>) {
-    runApplication<ApiGatewayApplication>(*args)
+    runApplication<AppAggregatorApplication>(*args)
 }

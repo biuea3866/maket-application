@@ -1,6 +1,7 @@
-package com.biuea.om.apigateway.routing
+package com.biuea.om.apigateway.presentation.routing
 
 import com.biuea.om.apigateway.filter.AuthenticationFilter
+import com.biuea.om.apigateway.filter.FeatureToggleFilter
 import com.biuea.om.apigateway.filter.LoggingFilter
 import com.biuea.om.apigateway.filter.TraceFilter
 import org.springframework.cloud.gateway.route.RouteLocator
@@ -9,13 +10,13 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorDsl
 import org.springframework.cloud.gateway.route.builder.routes
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import kotlin.apply
 
 @Configuration
 class Router(
     private val authenticationFilter: AuthenticationFilter,
     private val loggingFilter: LoggingFilter,
-    private val traceFilter: TraceFilter
+    private val traceFilter: TraceFilter,
+    private val featureToggleFilter: FeatureToggleFilter
 ) {
     @Bean
     fun routingPattern(builder: RouteLocatorBuilder): RouteLocator {
@@ -29,9 +30,10 @@ class Router(
                     f.filter(loggingFilter.apply(LoggingFilter.Config()))
                     f.filter(traceFilter.apply(TraceFilter.Config()))
                     f.filter(authenticationFilter.apply(AuthenticationFilter.Config()))
-                    f.rewritePath("/app", "/api/app")
+                    f.filter(featureToggleFilter.apply(FeatureToggleFilter.Config()))
+                    f.rewritePath("/api/app", "/app")
                 }
-                .uri("http://localhost:8081")
+                .uri("http://localhost:21000")
         }
     }
 }
